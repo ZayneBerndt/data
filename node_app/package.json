@@ -1,0 +1,19 @@
+{
+  "name": "voteit",
+  "version": "1.0.0",
+  "description": "nodejs app",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "jasmine": "^3.0.0",
+    "request": "^2.83.0"
+  },
+  "scripts": {
+    "test": "export NODE_ENV=test && jasmine",
+    "start": "node src/server.js"
+  },
+  "author": "zayneberndt",
+  "license": "ISC"
+}
