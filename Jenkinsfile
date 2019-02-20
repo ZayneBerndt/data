@@ -1,17 +1,17 @@
 pipeline {
   agent any
   stages {
-    stage('scm') {
+    stage('1') {
       steps {
         sh 'echo hi'
       }
     }
-    stage('scm') {
+    stage('2') {
       steps {
         sh 'echo hi'
       }
     }
-    stage('scm') {
+    stage('3') {
       steps {
         sh 'echo hi'
       }
