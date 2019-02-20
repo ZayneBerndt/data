@@ -13,7 +13,7 @@ pipeline {
     }
     stage('3') {
       steps {
-        sh 'echo hi'
+        sh 'echo hi 4'
       }
     }
   }
