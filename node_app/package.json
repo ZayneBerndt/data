@@ -11,8 +11,7 @@
     "request": "^2.83.0"
   },
   "scripts": {
-    "test": "export NODE_ENV=test && jasmine",
-    "start": "node src/server.js"
+    "start": "node app.js"
   },
   "author": "zayneberndt",
   "license": "ISC"
