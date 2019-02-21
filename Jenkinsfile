@@ -1,11 +1,16 @@
 pipeline {
   agent any
   stages {
-    stage('1') {
+    stage('static analysis') {
       steps {
-        sh 'echo hi'
+        script {
+          def scannerHome = tool name: 'Zayne Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+            withSonarQubeEnv('Prod') {
+            sh "${scannerHome}/bin/sonar-scanner"
+          }
+         }
+       }
       }
-    }
     stage('2') {
       steps {
         sh 'echo hi'
