@@ -5,6 +5,7 @@ stages {
     steps {
       script{
         COMMIT_MSG = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$2}' | tr -d '\n'")
+        echo COMMIT_MSG
       }
     }
   }
@@ -13,7 +14,6 @@ stages {
       script{
         sh 'npm install'
         sh 'npm test'
-        sh 'JASMINE_FILE=./jenkins-test-results.lcov ./node_modules/.bin/jasmine/** --reporter jasmine-junit-reporter'
       }
     }
   }
@@ -29,9 +29,6 @@ stages {
   }
   stage('SonqarQualityGate') {
     steps {
-      when {
-      expression {COMMIT_MSG =='DONE'}
-      }
       script {
         timeout(time: 1, unit: 'HOURS') {
         def qg = waitForQualityGate()
@@ -44,9 +41,6 @@ stages {
   }
   stage('build and push test') {
     steps {
-      when {
-      expression {COMMIT_MSG =='DONE'}
-      }
       script {
         sh dockerImageTesting
         sh docker.withRegistry( '', registryCredential ) {dockerImage.push()}
@@ -54,6 +48,15 @@ stages {
     }
   }
   stage('build and push latest') {
+    steps {
+      script {
+        sh dockerImage
+        sh docker.withRegistry( '', registryCredential ) {dockerImage.push()}
+        sh "docker rmi $registry:latest"
+      }
+    }
+  }
+  tage('Deploy Kubernetes') {
     steps {
       when {
       expression {COMMIT_MSG =='DONE'}
