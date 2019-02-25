@@ -11,7 +11,8 @@
     "request": "^2.83.0"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "jasmine './routes/**/*.spec.js'"
   },
   "author": "zayneberndt",
   "license": "ISC"
