@@ -52,7 +52,6 @@ stages {
         }
       }
     }
-  }
   stage('build and push latest') {
     steps {
       script {
@@ -73,4 +72,5 @@ stages {
   //     }
   //   }
   // }
+}
 }
