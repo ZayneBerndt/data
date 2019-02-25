@@ -9,14 +9,14 @@ stages {
       }
     }
   }
-  stage('Unit Tests') {
-    steps {
-      script{
-        sh 'npm install'
-        sh 'npm test'
-      }
-    }
-  }
+  // stage('Unit Tests') {
+  //   steps {
+  //     script{
+  //       sh 'npm install'
+  //       sh 'npm test'
+  //     }
+  //   }
+  // }
   stage('static analysis') {
     steps {
       script {
@@ -42,31 +42,36 @@ stages {
   stage('build and push test') {
     steps {
       script {
-        sh dockerImageTesting
-        sh docker.withRegistry( '', registryCredential ) {dockerImage.push()}
+        sh "docker build -t registry.internallab.co.uk:5000:${env.BUILD_NUMBER} ."
+        sh "docker image tag registry.internallab.co.uk:5000:${env.BUILD_NUMBER} registry.internallab.co.uk:5000:testing"
+        sh "docker login -u jenkins -p Renegade187! registry.internallab.co.uk:5000"
+        sh "docker push registry.internallab.co.uk:5000:${env.BUILD_NUMBER}"
+        sh "docker push registry.internallab.co.uk:5000:testing"
+        sh "docker image rmi registry.internallab.co.uk:5000:testing"
+        sh "docker image rmi registry.internallab.co.uk:5000:${env.BUILD_NUMBER}"
+        }
       }
     }
   }
   stage('build and push latest') {
     steps {
       script {
-        sh dockerImage
-        sh docker.withRegistry( '', registryCredential ) {dockerImage.push()}
-        sh "docker rmi $registry:latest"
+        sh "docker build -t registry.internallab.co.uk:5000:latest ."
+        sh "docker login -u jenkins -p Renegade187! registry.internallab.co.uk:5000"
+        sh "docker push registry.internallab.co.uk:5000:latest"
+        sh "docker image rmi registry.internallab.co.uk:5000:latest"
       }
     }
   }
-  tage('Deploy Kubernetes') {
-    steps {
-      when {
-      expression {COMMIT_MSG =='DONE'}
-      }
-      script {
-        sh dockerImage
-        sh docker.withRegistry( '', registryCredential ) {dockerImage.push()}
-        sh "docker rmi $registry:latest"
-      }
-    }
-  }
+  // stage('Deploy Kubernetes') {
+  //   steps {
+  //     when {
+  //     expression {COMMIT_MSG =='DONE'}
+  //     }
+  //     script {
+
+  //     }
+  //   }
+  // }
 }
 }
