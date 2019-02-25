@@ -17,14 +17,14 @@ stages {
       }
     }
   }
-  stage('Unit Tests') {
-    steps {
-      script{
-        sh 'npm install'
-        sh 'npm test'
-        }
-      }
-    }
+  // stage('Unit Tests') {
+  //   steps {
+  //     script{
+  //       sh 'npm install'
+  //       sh 'npm test'
+  //       }
+  //     }
+  //   }
   // stage('static analysis') {
   //   steps {
   //     script {
