@@ -1,13 +1,5 @@
 pipeline {
-agent any
-environment {
-  registry = "registry.internallab.co.uk:5000"
-  registryCredential = "docker login -u jenkins -p Renegade187!"
-  dockerImageTesting = docker.build registry + ":testing"
-  dockerImage = docker.build registry + ":latest"
-  SVC_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$2}'").replaceAll('\\s', '')
-  project = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$1}'").replaceAll('\\s', '')
-}
+  agent any
 stages {
   stage('Check Commit') {
     steps {
@@ -18,9 +10,6 @@ stages {
   }
   stage('Unit Tests') {
     steps {
-      when {
-      expression {COMMIT_MSG =='DONE'}
-      }
       script{
         sh 'npm install'
         sh 'npm test'
@@ -30,9 +19,6 @@ stages {
   }
   stage('static analysis') {
     steps {
-      when {
-      expression {COMMIT_MSG =='DONE'}
-      }
       script {
         def scannerHome = tool name: 'Zayne Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
         withSonarQubeEnv('Prod') {
@@ -63,6 +49,7 @@ stages {
       }
       script {
         sh dockerImageTesting
+        sh docker.withRegistry( '', registryCredential ) {dockerImage.push()}
       }
     }
   }
