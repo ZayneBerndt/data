@@ -54,7 +54,7 @@ stages {
 //        }
 //      }
 //    }
-//Move JIRA task to DONE
+//Move JIRA task to In Progress
   stage ('Jira') {
     steps {
       script {
@@ -102,6 +102,31 @@ stages {
   //     }
   //   }
   // }
+  //Move JIRA task to DONE
+    stage ('Jira') {
+      steps {
+        script {
+          def issue = jiraGetIssue idOrKey: "KM-30", site: 'Prod'
+          currentStatus = issue.data.fields.status.id
+          def transitions = jiraGetIssueTransitions idOrKey: "KM-30", site: 'Prod'
+          echo transitions.data.toString()
+          def arrayLength = transitions.data.transitions.size()
+          arrayLength.times {
+              if (transitions.data.transitions[it].to.name == 'Done') {
+                  failedId = transitions.data.transitions[it].id
+              }
+          }
+          def transitionInput = [
+              transition: [
+                  id: failedId
+              ]
+          ]
+          jiraTransitionIssue site: 'Prod', idOrKey: "KM-30", input: transitionInput
+          currentBuild.result = 'SUCCESS'
+          sh "exit 0"
+        }
+      }
+    }
   // stage("Deploy") {
   //   when {
   //       expression { COMMIT_MSG == "DONE"}
