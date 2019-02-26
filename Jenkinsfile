@@ -25,6 +25,13 @@ stages {
   //       }
   //     }
   //   }
+  stage('Create PR') {
+  //   steps {
+  //     script{
+  //       
+  //       }
+  //     }
+  //   }
   // stage('static analysis') {
   //   steps {
   //     script {
@@ -70,15 +77,20 @@ stages {
       }
     }
   }
-  // stage('Deploy Kubernetes') {
-  //   steps {
-  //     when {
-  //     expression {COMMIT_MSG =='DONE'}
-  //     }
-  //     script {
-
-  //     }
-  //   }
-  // }
-}
+  stage("Deploy") {
+    when {
+        expression { COMMIT_MSG == "DONE"}
+      }
+    steps {
+      kubernetesDeploy(
+        kubeconfigId: 'dev-cloud-prov-kc',
+        configs: 'infrastructure/*.yaml'
+      )
+      script{
+        NODE_PORT = sh(returnStdout: true, script: 'kubectl describe service test-web-service | grep NodePort: | grep -o -E "([0-9])\\w+"')
+        println NODE_PORT
+        }
+      }
+    }
+  }
 }
