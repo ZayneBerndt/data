@@ -55,7 +55,7 @@ stages {
 //      }
 //    }
 //Move JIRA task to In Progress
-  stage ('Jira') {
+  stage ('Jira Progress') {
     steps {
       script {
         def issue = jiraGetIssue idOrKey: "KM-30", site: 'Prod'
@@ -103,7 +103,7 @@ stages {
   //   }
   // }
   //Move JIRA task to DONE
-    stage ('Jira') {
+    stage ('Jira Done') {
       steps {
         script {
           def issue = jiraGetIssue idOrKey: "KM-30", site: 'Prod'
