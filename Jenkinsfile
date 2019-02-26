@@ -62,6 +62,20 @@ stages {
         currentStatus = issue.data.fields.status.id
         def transitions = jiraGetIssueTransitions idOrKey: "KM-30", site: 'Prod'
         echo transitions.data.toString()
+        def arrayLength = transitions.data.transitions.size()
+        arrayLength.times {
+            if (transitions.data.transitions[it].to.name == 'In Progress') {
+                failedId = transitions.data.transitions[it].id
+            }
+        }
+        def transitionInput = [
+            transition: [
+                id: failedId
+            ]
+        ]
+        jiraTransitionIssue site: 'Prod', idOrKey: "KM-30", input: transitionInput
+        currentBuild.result = 'SUCCESS'
+        sh "exit 0"
       }
     }
   }
