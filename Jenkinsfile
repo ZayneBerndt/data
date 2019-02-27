@@ -24,14 +24,14 @@ stages {
         }
       script{
         sh 'curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
-            -u zayne@enterpriseautomation.co.uk:Cap3town88 \
+            -u 'BB_USERNAME':'BB_PASSWORD' \
             --request POST \
             --header 'Content-Type: application/json' \
             --data '{
-                "title": "My Title",
+                "title": "COMMIT_MSG",
                 "source": {
                     "branch": {
-                        "name": "merge-this"
+                        "name": "${env.BRANCH_NAME}"
                     }
                 }
             }''
