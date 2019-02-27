@@ -17,18 +17,33 @@ stages {
       }
     }
   }
+  stage('PR') {
+    steps {
+      when {
+          expression { COMMIT_MSG == "PR"}
+        }
+      script{
+        sh 'curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
+            -u zayne@enterpriseautomation.co.uk:Cap3town88 \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --data '{
+                "title": "My Title",
+                "source": {
+                    "branch": {
+                        "name": "merge-this"
+                    }
+                }
+            }''
+          }
+        }
+      }
+
    stage('Unit Tests') {
      steps {
        script{
          sh 'npm install'
          sh 'npm test'
-         }
-       }
-     }
-  stage('Create PR') {
-     steps {
-       script{
-            Help!
          }
        }
      }
