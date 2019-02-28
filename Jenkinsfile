@@ -31,7 +31,7 @@ stages {
                 \"title\": \"My Title\", \
                 \"source\": { \
                     \"branch\": { \
-                        \"name\": \"merge-this\" \
+                        \"name\": \"merge-me\" \
                     } \
                 } \
             }'"
