@@ -67,7 +67,7 @@ stages {
          }
        }
      }
-   }
+  }
 // //Move JIRA task to In Progress
 //   stage ('Jira Progress') {
 //     steps {
