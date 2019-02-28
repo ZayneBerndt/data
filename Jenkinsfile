@@ -27,13 +27,13 @@ stages {
             -u zayne@enterpriseautomation.co.uk:Cap3town88 \
             --request POST \
             --header 'Content-Type: application/json' \
-            --data '{
-                \"title\": \"My Title\",
-                \"source\": {
-                    \"branch\": {
-                        \"name\": \"merge-this\"
-                    }
-                }
+            --data '{ \
+                \"title\": \"My Title\", \
+                \"source\": { \
+                    \"branch\": { \
+                        \"name\": \"merge-this\" \
+                    } \
+                } \
             }'"
           }
         }
