@@ -6,22 +6,22 @@ pipeline {
         }
     }
 stages {
-//   stage('Check Commit') {
-//     steps {
-//       script{
-//         COMMIT_MSG = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$2}' | tr -d '\n'")
-//         ISSUE_ID = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$3}' | tr -d '\n'")
-//         SVC_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$2}'").replaceAll('\\s', '')
-//         PROJ_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$1}'").replaceAll('\\s', '')
-//         echo COMMIT_MSG
-//       }
-//     }
-//   }
+  stage('Check Commit') {
+    steps {
+      script{
+        COMMIT_MSG = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$2}' | tr -d '\n'")
+        ISSUE_ID = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$3}' | tr -d '\n'")
+        SVC_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$2}'").replaceAll('\\s', '')
+        PROJ_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$1}'").replaceAll('\\s', '')
+        echo COMMIT_MSG
+      }
+    }
+  }
   stage('PR') {
     steps {
-      // when {
-      //     expression { COMMIT_MSG == "PR"}
-      //   }
+      when {
+          expression { COMMIT_MSG == "PR"}
+        }
       script{
         sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
             -u zayne@enterpriseautomation.co.uk:Cap3town88 \
@@ -46,28 +46,28 @@ stages {
 //          }
 //        }
 //      }
-//    stage('static analysis') {
-//      steps {
-//        script {
-//          def scannerHome = tool name: 'Zayne Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-//          withSonarQubeEnv('Prod') {
-//          sh "${scannerHome}/bin/sonar-scanner"
-//          }
-//        }
-//      }
-//    }
-//    stage('SonqarQualityGate') {
-//      steps {
-//        script {
-//          timeout(time: 1, unit: 'HOURS') {
-//          def qg = waitForQualityGate()
-//          if (qg.status != 'OK') {
-//            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-//            }
-//          }
-//        }
-//      }
-//    }
+   stage('static analysis') {
+     steps {
+       script {
+         def scannerHome = tool name: 'Zayne Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+         withSonarQubeEnv('Prod') {
+         sh "${scannerHome}/bin/sonar-scanner"
+         }
+       }
+     }
+   }
+   stage('SonqarQualityGate') {
+     steps {
+       script {
+         timeout(time: 1, unit: 'HOURS') {
+         def qg = waitForQualityGate()
+         if (qg.status != 'OK') {
+           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+           }
+         }
+       }
+     }
+   }
 // //Move JIRA task to In Progress
 //   stage ('Jira Progress') {
 //     steps {
