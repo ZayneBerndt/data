@@ -23,22 +23,21 @@ pipeline {
           expression { COMMIT_MSG == "PR"}
         }
       script{
-        sh "'curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
-              -u my-username:my-password \
-              --request POST \
-              --header 'Content-Type: application/json' \
-              --data '{
-                  "title": "My Title",
-                  "source": {
-                      "branch": {
-                          "name": "staging"
-                        }
-                      }
-                    }''"
-                  }
+        sh 'curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
+            -u 'BB_USERNAME':'BB_PASSWORD' \
+            --request POST \
+            --header 'Content-Type: application/json' \
+            --data '{
+                "title": "COMMIT_MSG",
+                "source": {
+                    "branch": {
+                        "name": "${env.BRANCH_NAME}"
+                    }
                 }
-              }
-
+            }''
+          }
+        }
+      }
 //    stage('Unit Tests') {
 //      steps {
 //        script{
