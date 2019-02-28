@@ -5,7 +5,7 @@ pipeline {
             args '--dns 192.168.0.61'
         }
     }
-// stages {
+stages {
 //   stage('Check Commit') {
 //     steps {
 //       script{
@@ -156,5 +156,5 @@ pipeline {
 //         }
 //       }
 //     }
-//   }
-// }
+  }
+}
