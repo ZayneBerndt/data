@@ -19,9 +19,9 @@ stages {
 //   }
   stage('PR') {
     steps {
-      when {
-          expression { COMMIT_MSG == "PR"}
-        }
+      // when {
+      //     expression { COMMIT_MSG == "PR"}
+      //   }
       script{
         sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
             -u zayne@enterpriseautomation.co.uk:Cap3town88 \
