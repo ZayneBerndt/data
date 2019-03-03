@@ -125,9 +125,9 @@ pipeline {
 
   stage('PR') {
     steps {
-      when {
-          expression { COMMIT_MSG == "PR"}
-        }
+      // when {
+      //     expression { COMMIT_MSG == "PR"}
+      //   }
 
         script{
           sh "git clone git@bitbucket.org:teamzayne/infrastructure.git ./k8"
