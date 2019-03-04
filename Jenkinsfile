@@ -86,43 +86,7 @@ pipeline {
   //         }
   //       }
   //     }
-  //   stage('build and push latest') {
-  //     steps {
-  //       script {
-  //         sh "docker build -t registry.internallab.co.uk:5000/${PROJ_NAME}/${SVC_NAME}:latest ."
-  //         sh "docker login -u jenkins -p Renegade187! registry.internallab.co.uk:5000"
-  //         sh "docker push registry.internallab.co.uk:5000/${PROJ_NAME}/${SVC_NAME}:latest"
-  //         sh "docker image rmi registry.internallab.co.uk:5000/${PROJ_NAME}/${SVC_NAME}:latest"
-  //       }
-  //     }
-  //   }
-
-  //   //Move JIRA task to DONE
-  //     stage ('Jira Done') {
-  //       steps {
-  //         script {
-  //           def issue = jiraGetIssue idOrKey: "KM-30", site: 'Prod'
-  //           currentStatus = issue.data.fields.status.id
-  //           def transitions = jiraGetIssueTransitions idOrKey: "KM-30", site: 'Prod'
-  //           echo transitions.data.toString()
-  //           def arrayLength = transitions.data.transitions.size()
-  //           arrayLength.times {
-  //               if (transitions.data.transitions[it].to.name == 'Done') {
-  //                   failedId = transitions.data.transitions[it].id
-  //               }
-  //           }
-  //           def transitionInput = [
-  //               transition: [
-  //                   id: failedId
-  //               ]
-  //           ]
-  //           jiraTransitionIssue site: 'Prod', idOrKey: "KM-30", input: transitionInput
-  //           currentBuild.result = 'SUCCESS'
-  //           sh "exit 0"
-  //         }
-  //       }
-  //     }
-
+  //
   stage('PR') {
     steps {
       // when {
@@ -160,6 +124,43 @@ pipeline {
         //           } \
         //       }'"
             }
+            // stage('build and push latest') {
+            //     steps {
+            //       script {
+            //         sh "docker build -t registry.internallab.co.uk:5000/${PROJ_NAME}/${SVC_NAME}:latest ."
+            //         sh "docker login -u jenkins -p Renegade187! registry.internallab.co.uk:5000"
+            //         sh "docker push registry.internallab.co.uk:5000/${PROJ_NAME}/${SVC_NAME}:latest"
+            //         sh "docker image rmi registry.internallab.co.uk:5000/${PROJ_NAME}/${SVC_NAME}:latest"
+            //       }
+            //     }
+            //   }
+
+            //   //Move JIRA task to DONE
+            //     stage ('Jira Done') {
+            //       steps {
+            //         script {
+            //           def issue = jiraGetIssue idOrKey: "KM-30", site: 'Prod'
+            //           currentStatus = issue.data.fields.status.id
+            //           def transitions = jiraGetIssueTransitions idOrKey: "KM-30", site: 'Prod'
+            //           echo transitions.data.toString()
+            //           def arrayLength = transitions.data.transitions.size()
+            //           arrayLength.times {
+            //               if (transitions.data.transitions[it].to.name == 'Done') {
+            //                   failedId = transitions.data.transitions[it].id
+            //               }
+            //           }
+            //           def transitionInput = [
+            //               transition: [
+            //                   id: failedId
+            //               ]
+            //           ]
+            //           jiraTransitionIssue site: 'Prod', idOrKey: "KM-30", input: transitionInput
+            //           currentBuild.result = 'SUCCESS'
+            //           sh "exit 0"
+            //         }
+            //       }
+            //     }
+
           }
         }
 
