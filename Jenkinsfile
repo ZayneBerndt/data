@@ -8,6 +8,7 @@ pipeline {
   stages {
     stage('Check Commit') {
       steps {
+        deleteDir()
         script{
           COMMIT_MSG = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$2}' | tr -d '\n'")
           ISSUE_ID = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$3}' | tr -d '\n'")
@@ -92,13 +93,13 @@ pipeline {
     steps {
       // when {
       //     expression { COMMIT_MSG == "PR"}
+
       //   }
 
         script{
            // sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/ \
            //  -u BB_USERNAME:BB_PASSWORD"
 
-           
            sh "git clone git@bitbucket.org:teamzayne/infrastructure.git ./k8"
            sh "sed -ie \"s/:testing/:${BUILD_NUMBER}/g\" ./k8/data.yaml"
         }
