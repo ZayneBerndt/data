@@ -97,6 +97,8 @@ pipeline {
         script{
            // sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/ \
            //  -u BB_USERNAME:BB_PASSWORD"
+
+           sh "rmdir -rf ${PWD}/k8/data.yaml"
            sh "git clone git@bitbucket.org:teamzayne/infrastructure.git ./k8"
            sh "sed -ie \"s/:testing/:${BUILD_NUMBER}/g\" ./k8/data.yaml"
         }
@@ -165,11 +167,7 @@ pipeline {
 
 
   }
-  post {
-    script {
-      sh "rmdir -rf ${PWD}/k8/data.yaml"
-    }
-  }
+
 }
 
 
