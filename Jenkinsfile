@@ -162,12 +162,13 @@ pipeline {
             //       }
             //     }
 
+
+
+  }
   post {
     script {
       sh "rmdir -rf ${PWD}/k8/data.yaml"
     }
-  }
-
   }
 }
 
