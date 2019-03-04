@@ -13,7 +13,7 @@ pipeline {
           ISSUE_ID = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$3}' | tr -d '\n'")
           SVC_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$2}'").replaceAll('\\s', '')
           PROJ_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$1}'").replaceAll('\\s', '')
-          PWD = sh(returnStdout: true, script: "echo pwd")
+          PWD = sh(returnStdout: true, script: "pwd")
           echo PWD
         }
       }
