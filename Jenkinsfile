@@ -98,9 +98,6 @@ pipeline {
       //   }
 
         script{
-           // sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/ \
-           //  -u BB_USERNAME:BB_PASSWORD"
-
            sh "git clone git@bitbucket.org:teamzayne/infrastructure.git ./k8"
            sh "sed -ie \"s/:testing/:${BUILD_NUMBER}/g\" ./k8/data.yaml"
         }
@@ -108,11 +105,9 @@ pipeline {
           kubeconfigId: 'zaynekubeconfig',
           configs: 'k8/*.yaml'
         )
-
-        // NODE_PORT = sh(returnStdout: true, script: 'kubectl describe service test-web-service | grep NodePort: | grep -o -E "([0-9])\\w+"')
-        // echo NODE_PORT
-        // URI = http:192.168.0.157: + NODEPORT (edited)
-        //get ip and port of stack in env var STACK_URI
+        NODE_PORT = sh(returnStdout: true, script: "kubectl get service web-svc -n voteit-${BRANCH_NAME}-${BUILD_NUMBER} -o json | grep -i \\\"nodePort\\\": | grep -o -E \"([0-9])\\w+\"")
+        echo NODE_PORT
+        // URI = http:192.168.0.157: + NODEPORT
         }
         // script{
         //   sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
