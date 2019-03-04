@@ -8,8 +8,8 @@ pipeline {
   stages {
     stage('Check Commit') {
       steps {
-        deleteDir()
-        checkout scm
+        // deleteDir()
+        // checkout scm
         script{
           COMMIT_MSG = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$2}' | tr -d '\n'")
           ISSUE_ID = sh(returnStdout: true, script: "git log -1 --pretty=oneline | awk '{print \$3}' | tr -d '\n'")
@@ -168,6 +168,13 @@ pipeline {
 
 
 
+  }
+
+  post {
+    always {
+       deleteDir()
+
+    }
   }
 
 }
