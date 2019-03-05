@@ -91,6 +91,7 @@ pipeline {
       }
   //
   stage('PR') {
+    agent none
     steps {
       // when {
       //     expression { COMMIT_MSG == "PR"}
