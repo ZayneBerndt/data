@@ -87,10 +87,10 @@ pipeline {
   //
     stage('PR') {
       agent none
+      when {
+        expression { COMMIT_MSG == "PR"}
+      }
       steps {
-        when {
-          expression { COMMIT_MSG == "PR"}
-        }
         script{
           sh "git clone https://ZayneBerndt@bitbucket.org/teamzayne/infrastructure.git ./k8"
           sh "sed -ie \"s/:testing/:${BUILD_NUMBER}/g\" ./k8/data.yaml"
