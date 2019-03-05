@@ -98,7 +98,7 @@ pipeline {
           NODE = sh(returnStdout: true, script: " kubectl get service web-svc -o jsonpath=\"{.spec.ports[0].nodePort}\" -n voteit-${BRANCH_NAME}-${BUILD_NUMBER}")
           // echo NODE
           sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
-          -u BB_USERNAME:BB_PASSWORD \
+          -u zayne@enterpriseautomation.co.uk:Cap3town88 \
           --request POST \
           --header 'Content-Type: application/json' \
           --data '{ \
