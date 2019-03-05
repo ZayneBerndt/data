@@ -105,8 +105,9 @@ pipeline {
           kubeconfigId: 'zaynekubeconfig',
           configs: 'k8/*.yaml'
         )
+
         script {
-          NODE = sh(returnStdout: true, script: "kubectl get service web-svc -o jsonpath=\"{.spec.ports[0].nodePort}\\")
+          NODE = sh(returnStdout: true, script: " kubectl get service web-svc -o jsonpath=\"{.spec.ports[0].nodePort}\" ")
           echo NODE
 
         }
