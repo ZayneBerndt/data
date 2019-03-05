@@ -88,8 +88,7 @@ pipeline {
     stage('PR') {
       agent none
       when {
-        expression { COMMIT_MSG == "PR"}
-        
+        expression { COMMIT_MSG == "PR"}  
       }
       steps {
         script{
