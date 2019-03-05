@@ -88,38 +88,35 @@ pipeline {
   stage('PR') {
     agent none
     steps {
-      // when {
-      //     expression { COMMIT_MSG == "PR"}
+      when {
+          expression { COMMIT_MSG == "PR"}
 
-      //   }
-
+        }
         script{
           sh "git clone https://ZayneBerndt@bitbucket.org/teamzayne/infrastructure.git ./k8"
           sh "sed -ie \"s/:testing/:${BUILD_NUMBER}/g\" ./k8/data.yaml"
           kubernetesDeploy kubeconfigId: 'zaynekubeconfig', configs: 'k8/*.yaml'
           NODE = sh(returnStdout: true, script: " kubectl get service web-svc -o jsonpath=\"{.spec.ports[0].nodePort}\" -n voteit-${BRANCH_NAME}-${BUILD_NUMBER}")
-          echo NODE
+          // echo NODE
+          sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
+              -u BB_USERNAME:BB_PASSWORD \
+              --request POST \
+              --header 'Content-Type: application/json' \
+              --data '{ \
+                  \"title\": \"My Title\", \
+                  \"description\": \"View this revision at http:192.168.0.157:${NODE}\", \
+                  \"source\": { \
+                      \"branch\": { \
+                          \"name\": \"${BRANCH_NAME}\" \
+                      } \
+                  } \
+              }'"
         }
         // NODE_PORT = sh(returnStdout: true, script: "kubectl get service web-svc -n voteit-${BRANCH_NAME}-${BUILD_NUMBER} -o json | grep -i \\\"nodePort\\\": | grep -o -E \"([0-9])\\w+\"")
 
         // echo NODE_PORT
-        // URI = http:192.168.0.157: + NODEPORT
+        // STACK_URI = http:192.168.0.157: + NODEPORT
         }
-        // script{
-        //   sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
-        //       -u BB_USERNAME:BB_PASSWORD \
-        //       --request POST \
-        //       --header 'Content-Type: application/json' \
-        //       --data '{ \
-        //           \"title\": \"My Title\", \
-        //           \"description\": \"View this revision at ${STACK_URI}\", \
-        //           \"source\": { \
-        //               \"branch\": { \
-        //                   \"name\": \"merge-me\" \
-        //               } \
-        //           } \
-        //       }'"
-            }
             // stage('build and push latest') {
             //     steps {
             //       script {
