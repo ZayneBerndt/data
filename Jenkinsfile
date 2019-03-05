@@ -99,18 +99,11 @@ pipeline {
       //   }
 
         script{
-           sh "git clone git@bitbucket.org:teamzayne/infrastructure.git ./k8"
-           sh "sed -ie \"s/:testing/:${BUILD_NUMBER}/g\" ./k8/data.yaml"
-        }
-        kubernetesDeploy (
-          kubeconfigId: 'zaynekubeconfig',
-          configs: 'k8/*.yaml'
-        )
-
-        script {
-          NODE = sh(returnStdout: true, script: " kubectl get service web-svc -o jsonpath=\"{.spec.ports[0].nodePort}\" ")
+          sh "git clone git@bitbucket.org:teamzayne/infrastructure.git ./k8"
+          sh "sed -ie \"s/:testing/:${BUILD_NUMBER}/g\" ./k8/data.yaml"
+          kubernetesDeploy kubeconfigId: 'zaynekubeconfig', configs: 'k8/*.yaml'
+          NODE = sh(returnStdout: true, script: " kubectl get service web-svc -o jsonpath=\"{.spec.ports[0].nodePort}\" -n voteit-${BRANCH_NAME}-${BUILD_NUMBER}")
           echo NODE
-
         }
         // NODE_PORT = sh(returnStdout: true, script: "kubectl get service web-svc -n voteit-${BRANCH_NAME}-${BUILD_NUMBER} -o json | grep -i \\\"nodePort\\\": | grep -o -E \"([0-9])\\w+\"")
 
