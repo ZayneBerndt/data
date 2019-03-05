@@ -94,7 +94,7 @@ pipeline {
       //   }
 
         script{
-          sh "git clone git@bitbucket.org:teamzayne/infrastructure.git ./k8"
+          sh "git clone https://ZayneBerndt@bitbucket.org/teamzayne/infrastructure.git ./k8"
           sh "sed -ie \"s/:testing/:${BUILD_NUMBER}/g\" ./k8/data.yaml"
           kubernetesDeploy kubeconfigId: 'zaynekubeconfig', configs: 'k8/*.yaml'
           NODE = sh(returnStdout: true, script: " kubectl get service web-svc -o jsonpath=\"{.spec.ports[0].nodePort}\" -n voteit-${BRANCH_NAME}-${BUILD_NUMBER}")
