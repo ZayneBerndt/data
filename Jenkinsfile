@@ -1,10 +1,5 @@
 pipeline {
-  agent {
-        docker {
-            image 'registry.internallab.co.uk:5000/slaves/ui-slave:latest'
-            args '--dns 192.168.0.61'
-        }
-    }
+  agent any
   stages {
     stage('Check Commit') {
       steps {
