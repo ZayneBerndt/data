@@ -11,7 +11,6 @@ pipeline {
           SVC_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$2}'").replaceAll('\\s', '')
           PROJ_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$1}'").replaceAll('\\s', '')
           PWD = sh(returnStdout: true, script: "pwd")
-          echo PWD
         }
       }
     }
@@ -88,7 +87,7 @@ pipeline {
     stage('PR') {
       agent none
       when {
-        expression { COMMIT_MSG == "PR"}  
+        expression { COMMIT_MSG == "PR"}
       }
       steps {
         script{
