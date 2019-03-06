@@ -11,6 +11,7 @@ pipeline {
           SVC_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$2}'").replaceAll('\\s', '')
           PROJ_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$1}'").replaceAll('\\s', '')
           PWD = sh(returnStdout: true, script: "pwd")
+          // PR_APPROVED = sh(returnlalal script "check for PR")
           echo PWD
         }
       }
@@ -88,7 +89,7 @@ pipeline {
     stage('PR') {
       agent none
       when {
-        expression { COMMIT_MSG == "PR"}  
+        expression { COMMIT_MSG == "PR"}
       }
       steps {
         script{
@@ -112,6 +113,16 @@ pipeline {
           }'"
         }
       }
+    stage('PR APPROVAL'){
+      steps{
+        script {
+          sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests/3/statuses"
+          STATUS = sh(returnStdout: true, script: "grep -oP '(?<="status": ")[^"]*'")
+                }
+            }
+        }
+      }
+    }
             // stage('build and push latest') {
             //     steps {
             //       script {
