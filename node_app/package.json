@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "jasmine './routes/**/*spec.js'"
+    "test": "jasmine './routes/**/*.spec.js'"
   },
   "author": "zayneberndt",
   "license": "ISC"
