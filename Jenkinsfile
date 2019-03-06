@@ -116,7 +116,7 @@ pipeline {
       steps{
         script {
           sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests/3/statuses"
-          STATUS = sh(returnStdout: true, script: "grep -oP '(?<="status": ")[^"]*'")
+          STATUS = sh(returnStdout: true, script: "grep -oP '(?<="state": ")[^"]*'")
           echo STATUS
                 }
             }
