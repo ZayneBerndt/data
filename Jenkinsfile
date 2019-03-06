@@ -11,8 +11,7 @@ pipeline {
           SVC_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$2}'").replaceAll('\\s', '')
           PROJ_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$1}'").replaceAll('\\s', '')
           PWD = sh(returnStdout: true, script: "pwd")
-          // PR_APPROVED = sh(returnlalal script "check for PR")
-          echo PWD
+
         }
       }
     }
