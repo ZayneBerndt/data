@@ -112,6 +112,7 @@ pipeline {
           }'"
         }
       }
+    }
     stage('PR APPROVAL'){
       steps{
         script {
@@ -120,8 +121,7 @@ pipeline {
                 }
             }
         }
-      }
-    }
+
             // stage('build and push latest') {
             //     steps {
             //       script {
@@ -161,7 +161,7 @@ pipeline {
 
 
 
-    }
+
   }
   post {
     always {
