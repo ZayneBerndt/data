@@ -60,7 +60,7 @@ describe("User", () => {
 
         User.create({
           email: "user@example.com",
-          password: "nananananananananananananananana BATMAN!"
+          password: "nanananananana BATMAN!"
         })
         .then((user) => {
 
