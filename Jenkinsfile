@@ -1,8 +1,9 @@
 pipeline {
   agent {
-       docker {
-           image 'node:latest'
-       }
+    docker {
+         image 'registry.internallab.co.uk:5000/slaves/ui-slave:latest'
+         args '--dns 192.168.0.61'
+     }
    }
   stages {
     stage('Check Commit') {
@@ -31,36 +32,36 @@ pipeline {
     //       }
     //     }
     //   }
-     stage('Unit Tests') {
-       steps {
-         script{
-           sh 'npm install'
-           sh 'npm test'
+     // stage('Unit Tests') {
+     //   steps {
+     //     script{
+     //       sh 'npm install'
+     //       sh 'npm test'
+     //       }
+     //     }
+     //   }
+    stage('static analysis') {
+      steps {
+        script {
+          def scannerHome = tool name: 'Zayne Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+           withSonarQubeEnv('Prod') {
+           sh "${scannerHome}/bin/sonar-scanner"
            }
          }
        }
-    // stage('static analysis') {
-    //   steps {
-    //     script {
-    //       def scannerHome = tool name: 'Zayne Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-    //        withSonarQubeEnv('Prod') {
-    //        sh "${scannerHome}/bin/sonar-scanner"
-    //        }
-    //      }
-    //    }
-    //  }
-    // stage('SonqarQualityGate') {
-    //   steps {
-    //     script {
-    //       timeout(time: 1, unit: 'HOURS') {
-    //       def qg = waitForQualityGate()
-    //       if (qg.status != 'OK') {
-    //         error "Pipeline aborted due to quality gate failure: ${qg.status}"
-    //       }
-    //        }
-    //      }
-    //    }
-    // }
+     }
+    stage('SonqarQualityGate') {
+      steps {
+        script {
+          timeout(time: 1, unit: 'HOURS') {
+          def qg = waitForQualityGate()
+          if (qg.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+          }
+           }
+         }
+       }
+    }
   // //Move JIRA task to In Progress
   //   stage ('Jira Progress') {
   //     steps {
