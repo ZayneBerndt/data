@@ -32,6 +32,13 @@ pipeline {
     //       }
     //     }
     //   }
+    stage('Slack build started') {
+           steps {
+               script {
+                   slackSend channel: '#development', color: 'good', message: 'Build : 'testing'  with Commit '+COMMIT_MSG , teamDomain: 'enterpriseautomation', token: 'YOaZAsgn27rkZR0bUFjTZ1Zn'
+               }
+           }
+       }
      // stage('Unit Tests') {
      //   steps {
      //     script{
