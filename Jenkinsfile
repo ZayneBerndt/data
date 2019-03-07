@@ -16,6 +16,7 @@ pipeline {
           SVC_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$2}'").replaceAll('\\s', '')
           PROJ_NAME = sh(returnStdout: true, script: "echo ${env.JOB_NAME} | awk -F/ '{print \$1}'").replaceAll('\\s', '')
           PWD = sh(returnStdout: true, script: "pwd")
+          COMMIT_EMAIL = sh(returnStdout: true, script: "git --no-pager show -s --format='%an <%ae>' ${env.GIT_COMMIT} | awk -F\\< '{print \$2}'").replaceAll('\\s', '').replaceAll('>', '')
           echo PWD
         }
       }
@@ -32,10 +33,10 @@ pipeline {
     //       }
     //     }
     //   }
-    stage('Slack build started') {
+    stage('Slack build') {
            steps {
                script {
-                   slackSend channel: '#development', color: 'good', message: 'Build : 'testing'  with Commit '+COMMIT_MSG , teamDomain: 'enterpriseautomation', token: 'YOaZAsgn27rkZR0bUFjTZ1Zn'
+                   slackSend channel: '#development', color: 'good', message: 'Build started for Service: '+SVC_NAME+' for Jira issue: '+ISSUE_ID+' by User '+COMMIT_EMAIL , teamDomain: 'enterpriseautomation', token: 'YOaZAsgn27rkZR0bUFjTZ1Zn'
                }
            }
        }
@@ -47,28 +48,39 @@ pipeline {
      //       }
      //     }
      //   }
-    stage('static analysis') {
-      steps {
-        script {
-          def scannerHome = tool name: 'Zayne Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-           withSonarQubeEnv('Prod') {
-           sh "${scannerHome}/bin/sonar-scanner"
-           }
-         }
-       }
-     }
-    stage('SonqarQualityGate') {
-      steps {
-        script {
-          timeout(time: 1, unit: 'HOURS') {
-          def qg = waitForQualityGate()
-          if (qg.status != 'OK') {
-            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-          }
-           }
-         }
-       }
-    }
+
+   // stage('merge parent'){
+   //       when {
+   //        expression { COMMIT_MSG == 'DONE' && PR_STATUS == 'APPROVED'}
+   //       }
+   //       steps{
+   //         script{
+   //             sh "git checkout ${PARENT_BRANCH} && git merge ${env.BRANCH_NAME}"
+   //         }
+   //       }
+   //     }
+   //  stage('static analysis') {
+   //    steps {
+   //      script {
+   //        def scannerHome = tool name: 'Zayne Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+   //         withSonarQubeEnv('Prod') {
+   //         sh "${scannerHome}/bin/sonar-scanner"
+   //         }
+   //       }
+   //     }
+   //   }
+   //  stage('SonqarQualityGate') {
+   //    steps {
+   //      script {
+   //        timeout(time: 1, unit: 'HOURS') {
+   //        def qg = waitForQualityGate()
+   //        if (qg.status != 'OK') {
+   //          error "Pipeline aborted due to quality gate failure: ${qg.status}"
+   //        }
+   //         }
+   //       }
+   //     }
+   //  }
   // //Move JIRA task to In Progress
   //   stage ('Jira Progress') {
   //     steps {
@@ -118,7 +130,7 @@ pipeline {
     //       sh "sed -ie \"s/:testing/:${BUILD_NUMBER}/g\" ./k8/data.yaml"
     //       kubernetesDeploy kubeconfigId: 'zaynekubeconfig', configs: 'k8/*.yaml'
     //       NODE = sh(returnStdout: true, script: " kubectl get service web-svc -o jsonpath=\"{.spec.ports[0].nodePort}\" -n voteit-${BRANCH_NAME}-${BUILD_NUMBER}")
-    //       // echo NODE
+    //       slackSend channel: '#development', color: 'good', message: 'Service: '+SVC_NAME+' (Commit Message: "'+COMMIT_MSG+'") is ready for review at http://192.168.0.157:' + NODE , teamDomain: 'enterpriseautomation', token: 'YOaZAsgn27rkZR0bUFjTZ1Zn'
     //       sh "curl https://api.bitbucket.org/2.0/repositories/teamzayne/data/pullrequests \
     //       -u zayne@enterpriseautomation.co.uk:Cap3town88 \
     //       --request POST \
@@ -135,7 +147,7 @@ pipeline {
     //     }
     //   }
     // }
-    //
+
     //
     // stage('build and push latest') {
     //   when {
