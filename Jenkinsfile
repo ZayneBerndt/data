@@ -18,9 +18,20 @@ pipeline {
           PWD = sh(returnStdout: true, script: "pwd")
           COMMIT_EMAIL = sh(returnStdout: true, script: "git --no-pager show -s --format='%an <%ae>' ${env.GIT_COMMIT} | awk -F\\< '{print \$2}'").replaceAll('\\s', '').replaceAll('>', '')
           echo PWD
+          ISSUE_KEY = ISSUE_ID.take(2)
+                        PARENT_BRANCH = sh(returnStdout: true, script: "git show-branch -a | grep ${ISSUE_KEY}-Sprint | grep \\* | awk -Forigin/ '{print \$2}' | awk -F] '{print \$1}'").replaceAll('\\s', '').replaceAll('origin/', '')
+                        println PARENT_BRANCH
+                        COMMIT_HASH = env.GIT_COMMIT.take(12)
+                        if(COMMIT_MSG != 'REVIEW' && COMMIT_MSG != 'IGNORE' ){
+                            ISSUE_ID = COMMIT_MSG
+                        }
+                        if(!ISSUE_ID){
+                        	ISSUE_ID = 0
+                        }
+                    }
         }
       }
-    }
+    
     stage('PR APPROVAL'){
      steps{
         script {
