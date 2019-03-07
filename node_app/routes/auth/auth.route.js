@@ -11,12 +11,12 @@
 //     })
 //   })
 // })
-const authHelper = require('./../utils/authHelper.js')
-app.post('/api/getData', function(req, body, res) {
-  authHelper.checkAuth(req).then(function(){
+// const authHelper = require('./../utils/authHelper.js')
+// app.post('/api/getData', function(req, body, res) {
+//   authHelper.checkAuth(req).then(function(){
     //give the data
-  }).catch(function(){
+  // }).catch(function(){
     //theres no auth
     //redirect to login
-  })
-})
+//   })
+// })
