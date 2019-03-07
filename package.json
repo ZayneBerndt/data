@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "jasmine './routes/**/*.spec.js'"
+    "test": "jasmine JASMINE_CONFIG_PATH=./jasmine.json"
   },
   "repository": {
     "type": "git",

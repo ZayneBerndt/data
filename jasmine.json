@@ -1,0 +1,10 @@
+{
+    "spec_dir": "./node_app/routes",
+    "spec_files": [
+      "**/*.spec.js"
+    ],
+    "helpers": [
+    ],
+    "stopSpecOnExpectationFailure": true,
+    "random": false
+}
